@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Chumtoad | Black Mesa Inbound</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap"
+    />
+
+    <style>
+      @font-face {
+        font-family: "HalfLife"; /* You can choose any name for your font */
+        src: url("HalfLife.ttf") format("truetype"); /* Replace 'yourfontfile.ttf' with the actual file name or path */
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      html {
+        color: #cfcfcf;
+        background: rgba(0, 0, 0, 0.7);
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh; /* Ensure at least full height of the viewport */
+        margin: 0; /* Remove default margin */
+        padding: 0; /* Remove default margin */
+      }
+
+      .bg {
+        filter: blur(1px);
+        background-image: url("bg.webp");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.5; /* Adjust the opacity here Lesterre */
+        z-index: 5;
+        pointer-events: none;
+      }
+
+      .content {
+        text-align: center;
+        position: relative;
+        padding: 20px;
+        overflow-y: auto;
+        z-index: 10;
+        max-width: 600px;
+      }
+
+      .content h1 {
+        font-family: "HalfLife", sans-serif; /* Use the font-family you specified above */
+        line-height: 100%;
+        margin: 0px 0px 20px 0px;
+        font-size: 60px;
+        text-align: center;
+        line-height: 1;
+        padding: 15px;
+        background-color: #f2f2f261;
+        color: #393939;
+      }
+
+      .content p {
+        font-size: 22px;
+        text-align: justify;
+        line-height: 1.2;
+        padding: 15px;
+        background-color: #f2f2f261;
+        color: #393939;
+        font-weight: 500;
+      }
+
+      .c4a1 {
+        position: absolute;
+        bottom: 40px;
+        z-index: 1999;
+        color: var(--fillColorAfter, #656463);
+        font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode",
+          "Lucida Sans", Tahoma;
+        font-size: var(--fontSize, 20px);
+        text-transform: uppercase;
+        font-weight: var(--fontWeight, 600);
+        letter-spacing: 0.05em;
+        text-align: center;
+        user-select: none;
+      }
+
+      .c4a1 .char {
+        --sp: var(--speed, 10);
+        --delay: calc(1ms * var(--sp) * var(--char-index));
+        animation: c4_fadeIn 0s linear var(--delay) both,
+          c4_fillColor calc(var(--fillSpeed, 250) * 1ms) linear var(--delay)
+            both,
+          c4_fadeOut 2s linear
+            calc(var(--totalCharacters) * var(--sp) * 1ms + 4000ms) forwards;
+      }
+
+      @keyframes c4_fadeIn {
+        from {
+          opacity: 0;
+        }
+      }
+
+      @keyframes c4_fadeOut {
+        to {
+          opacity: 0;
+        }
+      }
+
+      @keyframes c4_fillColor {
+        from {
+          color: var(--fillColor, #b76a35);
+        }
+      }
+    </style>
+
+    <script>
+      const titles = [
+        "Black Mesa Inbound",
+        "Anomalous Materials",
+        "Unforeseen Consequences",
+        "Office Complex",
+        '"We\'ve Got Hostiles"',
+        "Blast Pit",
+        "Power Up",
+        "On A Rail",
+        "Apprehension",
+        "Residue Processing",
+        "Questionable Ethics",
+        "Surface Tension",
+        '"Forget About Freeman!"',
+        "Lambda Core",
+        "Xen",
+        "Gonarch's Lair",
+        "Interloper",
+        "Nihilanth",
+        "Lesterres Balls",
+      ];
+
+      const parseTokens = (title) =>
+        title
+          .split("")
+          .map((char, index) =>
+            char === " "
+              ? '<span class="whitespace"> </span>'
+              : `<span class="char" style="--char-index:${index}">${char}</span>`
+          );
+
+      const setupConfig = (settings) =>
+        Object.entries(settings).reduce(
+          (acc, currentSetting) =>
+            currentSetting[1]
+              ? `${acc}--${currentSetting[0]}:${currentSetting[1]};`
+              : acc,
+          ""
+        );
+
+      const λ = (
+        title,
+        {
+          initialDelay = 0,
+          speed,
+          fillSpeed,
+          fillColor,
+          fillColorAfter,
+          fontSize,
+          fontWeight,
+          appendTo = null,
+        } = {}
+      ) => {
+        const container = !appendTo
+          ? document.body
+          : typeof appendTo !== "string"
+          ? appendTo
+          : document.querySelector(appendTo);
+
+        const content = parseTokens(title);
+        const totalCharacters = content.length;
+        const result = `<h1 class="c4a1 ${
+          !appendTo ? "c4a1--fixed" : ""
+        }" style="${setupConfig({
+          speed,
+          fillSpeed,
+          fillColor,
+          fillColorAfter,
+          fontSize,
+          fontWeight,
+          totalCharacters,
+        })}">${content.join("")}</h1>`;
+
+        if (initialDelay)
+          setTimeout(
+            () => container.insertAdjacentHTML("beforeend", result),
+            initialDelay
+          );
+        else container.insertAdjacentHTML("beforeend", result);
+      };
+
+      let current_title = 0;
+
+      const next = () => {
+        current_title =
+          current_title >= titles.length - 1 ? 0 : current_title + 1;
+        document.querySelector(".c4a1").remove();
+        λ(titles[current_title]);
+      };
+
+      setTimeout(() => {
+        λ(titles[current_title]);
+      }, 1000);
+
+      window.addEventListener("click", next);
+    </script>
+  </head>
+
+  <body>
+    <div class="bg"></div>
+
+    <div class="content">
+      <h1>CHUMTOaD.NeT</h1>
+
+      <p>
+        Chumtoads are small, amphibious creatures found on Xen. Similar in
+        morphology to Earth's toads, they are very low on the Xen food chain –
+        serving as the favorite prey of many Xen creatures. The name is a
+        compound of "chum" (i.e. shark bait) and "toad", in reference to these
+        traits. Chumtoads are notable for their bright purple skin, their single
+        red, catlike eye, their spiked backs, and their long, blue tongues.
+      </p>
+    </div>
+  </body>
+</html>
