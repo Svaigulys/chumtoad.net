@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Chumtoad's Lair</title>
+    <title>Chumtoad's Lair | Black Mesa Inbound</title>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,7 +31,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 100vh; /* Ensure at least full height of the viewport */
+        min-height: 100svh; /* Ensure at least full height of the viewport */
         margin: 0; /* Remove default margin */
         padding: 0; /* Remove default margin */
       }
@@ -47,7 +47,7 @@
         position: absolute;
         top: 0;
         left: 0;
-        opacity: 0.5; /* Adjust the opacity here Lesterre */
+        opacity: 0.6; /* Adjust the opacity here Lesterre */
         z-index: 5;
         pointer-events: none;
       }
@@ -108,6 +108,30 @@
             calc(var(--totalCharacters) * var(--sp) * 1ms + 4000ms) forwards;
       }
 
+      .play-sound {
+        display: block;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+
+      #cat {
+        position: fixed;
+        z-index: 999;
+        display: none;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .content h1 {
+          font-size: 38px;
+        }
+        .content p {
+          font-size: 16px;
+        }
+      }
+
       @keyframes c4_fadeIn {
         from {
           opacity: 0;
@@ -147,7 +171,7 @@
         "Gonarch's Lair",
         "Interloper",
         "Nihilanth",
-        "Lesterres Balls",
+        "Chumtoad's Lair",
       ];
 
       const parseTokens = (title) =>
@@ -223,11 +247,33 @@
       }, 1000);
 
       window.addEventListener("click", next);
+
+      document.addEventListener("DOMContentLoaded", function () {
+        var playSoundButton = document.querySelector(".play-sound");
+
+        playSoundButton.addEventListener("click", function () {
+          var audio = new Audio("hello.mp3");
+          audio.play();
+
+          var myDiv = document.getElementById("cat");
+
+          myDiv.style.display = "block";
+
+          setTimeout(function () {
+            myDiv.style.display = "none";
+          }, 1500);
+        });
+      });
     </script>
   </head>
 
   <body>
+    <a class="play-sound" href="#"></a>
     <div class="bg"></div>
+
+    <div id="cat">
+      <img src="cat.gif" />
+    </div>
 
     <div class="content">
       <h1>CHUMTOaD.NeT</h1>
